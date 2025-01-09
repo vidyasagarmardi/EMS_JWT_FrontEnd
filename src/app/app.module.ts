@@ -8,15 +8,13 @@ import { SignupComponent } from './components/signup/signup.component';
 import { SigninComponent } from './components/signin/signin.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AuthInterceptor } from './auth.interceptor';
-import { AddEmpComponent } from './components/add-emp/add-emp.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SignupComponent,
     SigninComponent,
-    DashboardComponent,
-    AddEmpComponent
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

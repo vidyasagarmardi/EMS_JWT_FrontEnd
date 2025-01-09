@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit{
 
     this.empForm = this.fb.group({
       firstName: [null, [Validators.required]],
+      middleName: [null],
       lastName: [null, [Validators.required]],
       email: [null, [Validators.email, Validators.required]],
       address: [null, [Validators.required]],
