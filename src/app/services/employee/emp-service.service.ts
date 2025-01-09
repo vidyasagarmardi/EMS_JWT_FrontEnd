@@ -17,22 +17,20 @@ export class EmpServiceService {
     return this.http.post(this.base_url+'authentication',loginReq);
   }
 
-  // getEmployees() : Observable<any>{
-  //   return this.http.get(this.base_url+'getAll',{
-  //     headers : this.createAuthHeader()
-  //   });
-  // }
+  addEmployee(emp: any) : Observable<any>{
+    return this.http.post(this.base_url+'save',emp);
+  }
 
-  createAuthHeader(){
-    const token = localStorage.getItem('token');
-    if(token){
-      return new HttpHeaders().set(
-        "Authorization","Bearer"+token
-      )
-    } else{
-      console.log("No token found in localstorage");
-    }
-    return null;
+  updateEmployee(emp: any, id: number) : Observable<any>{
+    return this.http.put(this.base_url+`update/${id}`,emp);
+  }
+
+  getEmployees() : Observable<any>{
+    return this.http.get(this.base_url+'getAll');
+  }
+
+  deleteEmployee(id: number) : Observable<any>{
+    return this.http.delete(this.base_url+`delete/${id}`);
   }
   
 }
