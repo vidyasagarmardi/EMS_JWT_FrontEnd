@@ -10,9 +10,12 @@ import { EmpServiceService } from 'src/app/services/employee/emp-service.service
 })
 export class DashboardComponent implements OnInit{
 
-  empList!: Employee[];
-
+  empList! : Employee[];
+  selectedEmpId : number = 0;
   empForm! : FormGroup;
+  modalTitle! : string;
+  infoMessage! : string;
+  selectedEmp! : Employee;
 
   constructor(
     private fb : FormBuilder,
@@ -32,6 +35,33 @@ export class DashboardComponent implements OnInit{
     })
   }
 
+  selectedEmployee(id: number){
+    this.selectedEmpId = id;
+  }
+
+  onAddEmp(){
+    this.modalTitle = "Add Employee";
+  }
+
+  onUpdateEmp(id: number){
+    this.selectedEmpId = id;
+    this.modalTitle = "Update Employee";
+    this.empService.getEmployeeById(id).subscribe(
+      data => {
+        console.log("emp data: ",data.Data);
+        this.selectedEmp = data.Data;
+        this.empForm.patchValue({
+          firstName: this.selectedEmp.firstName || ' ',
+          middleName: this.selectedEmp.middleName || ' ',
+          lastName: this.selectedEmp.lastName || ' ',
+          email: this.selectedEmp.email || ' ',
+          address: this.selectedEmp.address || ' ',
+          phone: this.selectedEmp.phone || ' '
+        })
+      }
+    );
+  }
+
   getEmployeeList(){
     this.empService.getEmployees().subscribe(
       data => {
@@ -41,26 +71,50 @@ export class DashboardComponent implements OnInit{
     )
   }
 
-  deleteEmp(id: number){
-    console.log("employee id to delete",id);
-    this.empService.deleteEmployee(id).subscribe(
-      data => {
-        console.log("The delete Employee is:",data);
-        this.getEmployeeList();
-      }
-    )
+  deleteEmp(){
+    console.log("employee id to delete",this.selectedEmpId);
+    if(this.selectedEmpId!=null){
+      this.empService.deleteEmployee(this.selectedEmpId).subscribe(
+        data => {
+          console.log("The delete Employee is:",data);
+          this.getEmployeeList();
+          this.selectedEmpId = 0;
+        }
+      );
+    }
   }
 
-  submitForm(){
-    console.log(this.empForm.value);
-   
+  clearForm(){
+    this.empForm.reset();
+    this.selectedEmpId=0;
+  }
+
+  updateEmp(){
+    this.empService.updateEmployee(this.empForm.value,this.selectedEmpId).subscribe(
+      data => {
+        console.log("Updated Employee : ",data.Data);
+        this.getEmployeeList();
+        this.selectedEmpId = 0;
+        this.infoMessage = "Employee updated successfully.";
+      }
+    );
+  }
+
+  addEmp(){
     this.empService.addEmployee(this.empForm.value).subscribe(
       data => {
         console.log(data);
         this.empForm.reset();
-        this.getEmployeeList();
+        this.infoMessage = "Employee added successfully.";
       }
-    )
+    );
+  }
+
+  submitForm(){
+    if(this.selectedEmpId!=0)
+      this.updateEmp();
+    else
+      this.addEmp();
   }
 
 }

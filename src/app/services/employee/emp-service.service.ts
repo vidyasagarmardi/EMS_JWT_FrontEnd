@@ -17,6 +17,10 @@ export class EmpServiceService {
     return this.http.post(this.base_url+'authentication',loginReq);
   }
 
+  getEmployeeById(id: number) : Observable<any>{
+    return this.http.get(this.base_url+`getById/${id}`);
+  }
+
   addEmployee(emp: any) : Observable<any>{
     return this.http.post(this.base_url+'save',emp);
   }

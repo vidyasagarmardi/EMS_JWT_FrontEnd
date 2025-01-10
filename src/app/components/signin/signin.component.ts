@@ -35,9 +35,9 @@ export class SigninComponent implements OnInit{
         console.log(data.token);
         this.cookie.set('token',data.token);
         this.router.navigateByUrl("/dashboard");
+        AuthService.loggedIn.next(true);
       }
     )
-    AuthService.loggedIn.next(true);
   }
 
 }
